@@ -23,91 +23,83 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_centerHorizontal="true">
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:text="D"
-                android:textColor="@android:color/white"
-                android:textSize="90sp" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
 
-            <at.markushi.ui.CircleButton
-                android:id="@+id/ball"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                app:cb_color="#FF000000"
-                android:layout_marginTop="20dp"/>
+                <TextView
+                    android:id="@+id/title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="D"
+                    android:textColor="@android:color/white"
+                    android:textSize="90sp" />
 
-            <TextView
-                android:id="@+id/title2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
-                android:text="dge"
-                android:textColor="@android:color/white"
-                android:textSize="90sp" />
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ball"
+                    android:layout_width="70dp"
+                    android:layout_height="70dp"
+                    android:baselineAlignBottom="true"
+                    app:cb_color="#FF212121" />
+
+                <TextView
+                    android:id="@+id/title2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="dge"
+                    android:textColor="@android:color/white"
+                    android:textSize="90sp" />
 
             </LinearLayout>
 
-
-            <at.markushi.ui.CircleButton
-                android:id="@+id/start"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:adjustViewBounds="true"
-                android:onClick="onStart"
-                android:src="@drawable/ic_play_arrow_white_24dp"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                app:cb_color="#ffff0000"
-                app:cb_pressedRingWidth="15dip" />
+                android:paddingTop="100dp"
+                android:orientation="horizontal"
+                >
 
-            <at.markushi.ui.CircleButton
-                android:id="@+id/share"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_toRightOf="@+id/start"
-                android:adjustViewBounds="false"
-                android:onClick="onStart"
-                android:src="@drawable/ic_play_arrow_white_24dp"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                app:cb_color="#ffff0000"
-                app:cb_pressedRingWidth="15dip" />
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/share"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:adjustViewBounds="true"
+                    android:onClick="onShare"
+                    android:src="@drawable/ic_share_white_36dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:cb_color="#ffF44336"
+                    app:cb_pressedRingWidth="15dip" />
 
-            <at.markushi.ui.CircleButton
-                android:id="@+id/rate"
-                android:layout_width="130dp"
-                android:layout_height="130dp"
-                android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/start"
-                android:adjustViewBounds="false"
-                android:onClick="onStart"
-                android:src="@drawable/ic_play_arrow_white_24dp"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                app:cb_color="#ffff0000"
-                app:cb_pressedRingWidth="15dip" />
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/start"
+                    android:layout_width="130dp"
+                    android:layout_height="130dp"
+                    android:adjustViewBounds="false"
+                    android:onClick="onStart"
+                    android:src="@drawable/ic_play_arrow_white_48dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:cb_color="#ffF44336"
+                    app:cb_pressedRingWidth="15dip" />
 
-            <!--<at.markushi.ui.CircleButton-->
-            <!--android:id="@+id/share"-->
-            <!--android:layout_width="70dip"-->
-            <!--android:layout_height="70dip"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:src="@drawable/ic_play_arrow_white_24dp"-->
-            <!--android:text="lol"-->
-            <!--android:textColor="@android:color/white"-->
-            <!--android:textSize="20sp"-->
-            <!--app:cb_color="#ff00ACC1"-->
-            <!--app:cb_pressedRingWidth="6dip" />-->
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/rate"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
+                    android:adjustViewBounds="false"
+                    android:onClick="onStart"
+                    android:src="@drawable/ic_favorite_white_36dp"
+                    android:textColor="@android:color/white"
+                    android:textSize="20sp"
+                    app:cb_color="#ffF44336"
+                    app:cb_pressedRingWidth="15dip" />
+
+            </LinearLayout>
         </RelativeLayout>
     </FrameLayout>
 
