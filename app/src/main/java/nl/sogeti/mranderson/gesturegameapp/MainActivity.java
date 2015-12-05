@@ -2,31 +2,61 @@ package nl.sogeti.mranderson.gesturegameapp;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.view.View;
 import android.view.Window;
+import android.widget.RelativeLayout;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements GameCallBack {
     /**
      * Called when the activity is first created.
      */
-    private GameView gameview;
+    private GameView gameView;
+    private RelativeLayout overlay;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        gameview = new GameView(this, this);
-        setContentView(gameview);
+        setContentView(R.layout.activity_main);
+        gameView = (GameView) findViewById(R.id.surfaceView1);
+        overlay = (RelativeLayout) findViewById(R.id.overlay);
+        gameView.setGameCallback(this);
+
+        playMusic();
     }
 
-
-    protected void onPause() {
-        super.onPause();
-        Log.v("MY_ACTIVITY", "onPause");
+    public void onStart(View v) {
+        removeOverlay();
+        startGame();
     }
 
-    protected void onResume() {
-        super.onResume();
-        Log.v("MY_ACTIVITY", "onResume");
+    private void startGame() {
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                gameView.prepareTime();
+            }
+        }, 3000);
+    }
+
+    private void removeOverlay() {
+        overlay.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onGameOver() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                overlay.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    private void playMusic() {
+//        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.intro);
+//        backgroundMusic.setLooping(true);
+//        backgroundMusic.start();
     }
 }

@@ -1,11 +1,10 @@
 package nl.sogeti.mranderson.gesturegameapp;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.media.MediaPlayer;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -22,22 +21,42 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
     public static int GAME_STATE = 0;
     private static int MIN_DXDY = 2;
-    private final Activity atc;
+    private final GameView gameView;
     private SurfaceHolder holder;
     private GameLoopThread gameLoopThread;
     private List<Block> sprites = new ArrayList<>();
     private MarkerView activeMarker;
     private Timer timer;
     public static String endTime;
-    private int FLAG = 1;
     private boolean init = false;
+    private Activity atc;
+    private GameCallBack mGameCallback;
 
-    public GameView(Context context, Activity atc) {
+    public GameView(Context context) {
         super(context);
-        this.atc = atc;
-        MediaPlayer backgroundMusic = MediaPlayer.create(context, R.raw.intro);
-        backgroundMusic.setLooping(true);
-        backgroundMusic.start();
+        this.gameView = this;
+        setup();
+    }
+
+    public GameView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.gameView = this;
+        setup();
+    }
+
+    public GameView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        this.gameView = this;
+        setup();
+    }
+
+    public GameView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        this.gameView = this;
+        setup();
+    }
+
+    private void setup() {
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
@@ -53,7 +72,6 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
                 gameLoopThread.start();
                 createSprites();
                 setOnTouchListener(GameView.this);
-
             }
 
             @Override
@@ -61,6 +79,36 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
                                        int width, int height) {
             }
         });
+    }
+
+    private void hideSystemUI() {
+        // Set the IMMERSIVE flag.
+        // Set the content to appear under the system bars so that the content
+        // doesn't resize when the system bars hide and show.
+//        MainActivity.this.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                gameView.setSystemUiVisibility(
+//                        View.SYSTEM_UI_FLAG_LOW_PROFILE);
+//            }
+//        });
+
+    }
+
+    // This snippet shows the system bars. It does this by removing all the flags
+// except for the ones that make the content appear under the system bars.
+    private void showSystemUI() {
+
+//        atc.runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                gameView.setSystemUiVisibility(
+//                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//            }
+//        });
+
     }
 
     public void createSprites() {
@@ -76,56 +124,33 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         sprites.add(new Block(this));
     }
 
-    private void showMenu() {
-        atc.runOnUiThread(new Runnable() {   // Use the context here
-            @Override
-            public void run() {
-                DialogFragment newFragment = new MenuDialogFragment();
-                newFragment.show(atc.getFragmentManager(), "missiles");
-            }
-        });
-    }
-
-    private void showFinish() {
-        atc.runOnUiThread(new Runnable() {   // Use the context here
-            @Override
-            public void run() {
-                DialogFragment newFragment = new FinishedDialogFragment();
-                newFragment.show(atc.getFragmentManager(), "missiles");
-            }
-        });
-    }
-
     @Override
     protected void onDraw(final Canvas canvas) {
         if (!init) {
             init = true;
-            showMenu();
+            GAME_STATE = 1;
         }
+        if (canvas != null) {
 
-        canvas.drawColor(Color.WHITE);
-        activeMarker.onDraw(canvas);
-        for (Block sprite : sprites) {
-            sprite.onDraw(canvas);
-        }
-
-
-        if (GAME_STATE == 1) {
-            GAME_STATE = -1;
-            try {
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-            GAME_STATE = 2;
-            timer.startTime();
-        } else if (GAME_STATE == 2) {
+            canvas.drawColor(Color.WHITE);
+            activeMarker.onDraw(canvas);
             timer.onDraw(canvas);
             for (Block sprite : sprites) {
-                if (sprite.isCollition(activeMarker.getX(), activeMarker.getY())) {
-                    endTime = timer.getElapsedTime();
-                    showFinish();
-                    GAME_STATE = -1;
+                sprite.onDraw(canvas);
+            }
+
+            if (GAME_STATE == 1) {
+                prepareTime();
+                activeMarker.setActive(false);
+                GAME_STATE = -1;
+            } else if (GAME_STATE == 2) {
+                activeMarker.setActive(true);
+
+                for (Block sprite : sprites) {
+                    if (sprite.isCollition(activeMarker.getX(), activeMarker.getY(), activeMarker.getActive())) {
+                        endTime = timer.getElapsedTime();
+                        restart();
+                    }
                 }
             }
         }
@@ -148,5 +173,21 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         return true;
     }
 
+    private void restart() {
+        GAME_STATE = -1;
+        timer.restart();
+        activeMarker.setActive(false);
+        mGameCallback.onGameOver();
+    }
 
+
+    public void prepareTime() {
+        GAME_STATE = 2;
+        timer.startTime();
+    }
+
+
+    public void setGameCallback(GameCallBack cb) {
+        this.mGameCallback = cb;
+    }
 }

@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
 /**
  * Created by MrAnderson1 on 22/06/15.
@@ -31,8 +30,8 @@ public class MenuDialogFragment extends DialogFragment implements View.OnClickLi
         // Inflate and set the layout for the dialog
         // Pass null as the parent view because its going in the dialog layout
         View view = inflater.inflate(R.layout.fragment_menu, null);
-        Button button = (Button) view.findViewById(R.id.new_game);
-        button.setOnClickListener(this);
+//        Button button = (Button) view.findViewById(R.id.new_game);
+//        button.setOnClickListener(this);
         builder.setView(view);
 
 

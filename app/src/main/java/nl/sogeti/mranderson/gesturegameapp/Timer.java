@@ -9,15 +9,14 @@ import android.graphics.Paint;
  */
 public class Timer {
 
-    private long startTime;
+    private long startTime = 0;
     private int x = 0;
     private int y = 0;
-    private GameView gameView;
     private Paint p;
-    private String t;
+    private String t = "0:0";
+    private boolean started = false;
 
     public Timer(GameView gameView) {
-        this.gameView = gameView;
         p = new Paint();
         p.setAntiAlias(true);
         p.setColor(Color.BLACK);
@@ -31,11 +30,13 @@ public class Timer {
     }
 
     public void startTime() {
+        started = true;
         startTime = System.currentTimeMillis();
     }
 
     private void update() {
-        t = getElapsedTimeMin() + ":" + getElapsedTimeSecs();
+        if (started)
+            t = getElapsedTimeMin() + ":" + getElapsedTimeSecs();
     }
 
     public void onDraw(Canvas canvas) {
@@ -59,5 +60,10 @@ public class Timer {
         long elapsed = 0;
         elapsed = (((System.currentTimeMillis() - startTime) / 1000) / 60) % 60;
         return elapsed;
+    }
+
+    public void restart() {
+        this.started = false;
+        this.t = "0:0";
     }
 }

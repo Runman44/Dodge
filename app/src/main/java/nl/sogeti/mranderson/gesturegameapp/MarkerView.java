@@ -12,21 +12,35 @@ public class MarkerView {
     private final GameView gameView;
     private float x = 0;
     private float y = 0;
-    Paint paint;
+    private boolean active = false;
 
     public void onDraw(Canvas canvas) {
-        canvas.drawCircle(x, y, 30, paint);
+        canvas.drawCircle(x, y, 30, getPaint());
+    }
+
+    public void setActive(boolean active){
+        this.active = active;
+    }
+
+
+    private Paint getPaint() {
+        Paint paint = new Paint();
+        paint.setAntiAlias(true);
+        if (active) {
+            paint.setColor(Color.BLACK);
+        } else {
+            paint.setColor(Color.GRAY);
+        }
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(10f);
+        return paint;
     }
 
     public MarkerView(GameView gameView) {
         this.gameView = gameView;
         x = gameView.getWidth() / 2;
         y = gameView.getHeight() / 2;
-        paint = new Paint();
-        paint.setAntiAlias(true);
-        paint.setColor(Color.BLACK);
-        paint.setStyle(Paint.Style.FILL);
-        paint.setStrokeWidth(10f);
+
     }
 
 
@@ -53,5 +67,9 @@ public class MarkerView {
             this.y = y;
         }
 
+    }
+
+    public boolean getActive() {
+        return active;
     }
 }

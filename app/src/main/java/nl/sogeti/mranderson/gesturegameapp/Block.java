@@ -54,7 +54,9 @@ public class Block {
         canvas.drawRect(x, y, x + 60, y + 60, p);
     }
 
-    public boolean isCollition(float x2, float y2) {
+    public boolean isCollition(float x2, float y2, boolean active) {
+        if(!active)
+            return false;
         float distX = Math.abs(x2 - (this.x + 30));
         float distY = Math.abs(y2 - (this.y + 30));
         if (distX > (30 + 30) || distY > (30 + 30)) {
