@@ -1,6 +1,7 @@
 package nl.sogeti.mranderson.gesturegameapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -29,6 +30,14 @@ public class MainActivity extends Activity implements GameCallBack {
     public void onStart(View v) {
         removeOverlay();
         startGame();
+    }
+
+    public void onShare(View v) {
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, "Awesome game");
+        sendIntent.setType("text/plain");
+        startActivity(sendIntent);
     }
 
     private void startGame() {
