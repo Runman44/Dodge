@@ -35,8 +35,9 @@ public class Timer {
     }
 
     private void update() {
-        if (started)
+        if (started) {
             t = getElapsedTimeMin() + ":" + getElapsedTimeSecs();
+        }
     }
 
     public void onDraw(Canvas canvas) {

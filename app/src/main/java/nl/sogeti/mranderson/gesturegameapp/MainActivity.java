@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.view.View;
 import android.view.Window;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 public class MainActivity extends Activity implements GameCallBack {
     /**
@@ -14,6 +15,7 @@ public class MainActivity extends Activity implements GameCallBack {
      */
     private GameView gameView;
     private RelativeLayout overlay;
+    private TextView score;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,7 +25,8 @@ public class MainActivity extends Activity implements GameCallBack {
         gameView = (GameView) findViewById(R.id.surfaceView1);
         overlay = (RelativeLayout) findViewById(R.id.overlay);
         gameView.setGameCallback(this);
-
+        score = (TextView) findViewById(R.id.score);
+        score.setVisibility(View.GONE);
         playMusic();
     }
 
@@ -33,11 +36,12 @@ public class MainActivity extends Activity implements GameCallBack {
     }
 
     public void onShare(View v) {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "Awesome game");
-        sendIntent.setType("text/plain");
-        startActivity(sendIntent);
+        String shareBody = "Check out my points:";
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dodge Game" + "\n");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, ""));
     }
 
     private void startGame() {
@@ -54,11 +58,15 @@ public class MainActivity extends Activity implements GameCallBack {
     }
 
     @Override
-    public void onGameOver() {
+    public void onGameOver(final String endTime) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 overlay.setVisibility(View.VISIBLE);
+                if (!endTime.equals("")) {
+                    score.setVisibility(View.VISIBLE);
+                    score.setText(String.format(getString(R.string.score), endTime));
+                }
             }
         });
     }
@@ -67,5 +75,19 @@ public class MainActivity extends Activity implements GameCallBack {
 //        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.intro);
 //        backgroundMusic.setLooping(true);
 //        backgroundMusic.start();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            gameView.setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 }

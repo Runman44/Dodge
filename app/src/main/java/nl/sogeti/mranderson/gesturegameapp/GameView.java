@@ -81,36 +81,6 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         });
     }
 
-    private void hideSystemUI() {
-        // Set the IMMERSIVE flag.
-        // Set the content to appear under the system bars so that the content
-        // doesn't resize when the system bars hide and show.
-//        MainActivity.this.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                gameView.setSystemUiVisibility(
-//                        View.SYSTEM_UI_FLAG_LOW_PROFILE);
-//            }
-//        });
-
-    }
-
-    // This snippet shows the system bars. It does this by removing all the flags
-// except for the ones that make the content appear under the system bars.
-    private void showSystemUI() {
-
-//        atc.runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                gameView.setSystemUiVisibility(
-//                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//            }
-//        });
-
-    }
-
     public void createSprites() {
         activeMarker = new MarkerView(this);
         timer = new Timer(this);
@@ -177,7 +147,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         GAME_STATE = -1;
         timer.restart();
         activeMarker.setActive(false);
-        mGameCallback.onGameOver();
+        mGameCallback.onGameOver(endTime);
     }
 
 
