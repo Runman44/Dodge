@@ -20,6 +20,7 @@ public class MainActivity extends Activity implements GameCallBack {
     private RelativeLayout overlay;
     private TextView score;
     private TextView highscore;
+    private MediaPlayer backgroundMusic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -32,15 +33,19 @@ public class MainActivity extends Activity implements GameCallBack {
         score = (TextView) findViewById(R.id.score);
         highscore = (TextView) findViewById(R.id.best);
         highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
-        playMusic();
+        playBackgroundMusic();
     }
 
     public void onStart(View v) {
+        playClick();
         removeOverlay();
         startGame();
     }
 
+
+
     public void onShare(View v) {
+        playClick();
         String shareBody = "Check out my points:";
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -105,9 +110,15 @@ public class MainActivity extends Activity implements GameCallBack {
         return sharedPref.getString(getString(R.string.saved_high_score), "0:0");
     }
 
-    private void playMusic() {
-        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.intro);
+    private void playBackgroundMusic() {
+        backgroundMusic = MediaPlayer.create(this, R.raw.background);
+        backgroundMusic.setVolume(0.5f, 0.5f);
         backgroundMusic.setLooping(true);
+        backgroundMusic.start();
+    }
+
+    private void playClick() {
+        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.click);
         backgroundMusic.start();
     }
 
@@ -128,6 +139,12 @@ public class MainActivity extends Activity implements GameCallBack {
     @Override
     protected void onPause() {
         super.onPause();
+        backgroundMusic.pause();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        backgroundMusic.start();
     }
 }
