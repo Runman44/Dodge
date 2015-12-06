@@ -13,7 +13,7 @@ public class Timer {
     private int x = 0;
     private int y = 0;
     private Paint p;
-    private String t = "0:0";
+    private String t = "";
     private boolean started = false;
 
     public Timer(GameView gameView) {
@@ -65,6 +65,11 @@ public class Timer {
 
     public void restart() {
         this.started = false;
-        this.t = "0:0";
+        this.t = "";
     }
+
+    public void prepareTime() {
+        t = "0:0";
+    }
+
 }

@@ -68,9 +68,9 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
+                createSprites();
                 gameLoopThread = new GameLoopThread(GameView.this);
                 gameLoopThread.start();
-                createSprites();
                 setOnTouchListener(GameView.this);
             }
 
@@ -82,6 +82,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
     }
 
     public void createSprites() {
+        sprites = new ArrayList<>();
         activeMarker = new MarkerView(this);
         timer = new Timer(this);
         sprites.add(new Block(this));
@@ -109,11 +110,8 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
                 sprite.onDraw(canvas);
             }
 
-            if (GAME_STATE == 1) {
-                prepareTime();
-                activeMarker.setActive(false);
-                GAME_STATE = -1;
-            } else if (GAME_STATE == 2) {
+
+            if (GAME_STATE == 2) {
                 activeMarker.setActive(true);
 
                 for (Block sprite : sprites) {
@@ -152,6 +150,10 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
 
     public void prepareTime() {
+        timer.prepareTime();
+    }
+
+    public void startTime() {
         GAME_STATE = 2;
         timer.startTime();
     }

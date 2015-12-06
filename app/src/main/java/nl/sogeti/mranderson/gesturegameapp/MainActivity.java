@@ -1,7 +1,10 @@
 package nl.sogeti.mranderson.gesturegameapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -16,6 +19,7 @@ public class MainActivity extends Activity implements GameCallBack {
     private GameView gameView;
     private RelativeLayout overlay;
     private TextView score;
+    private TextView highscore;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -26,7 +30,8 @@ public class MainActivity extends Activity implements GameCallBack {
         overlay = (RelativeLayout) findViewById(R.id.overlay);
         gameView.setGameCallback(this);
         score = (TextView) findViewById(R.id.score);
-        score.setVisibility(View.GONE);
+        highscore = (TextView) findViewById(R.id.best);
+        highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
         playMusic();
     }
 
@@ -45,10 +50,11 @@ public class MainActivity extends Activity implements GameCallBack {
     }
 
     private void startGame() {
+        gameView.prepareTime();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
-                gameView.prepareTime();
+                gameView.startTime();
             }
         }, 3000);
     }
@@ -64,17 +70,45 @@ public class MainActivity extends Activity implements GameCallBack {
             public void run() {
                 overlay.setVisibility(View.VISIBLE);
                 if (!endTime.equals("")) {
-                    score.setVisibility(View.VISIBLE);
                     score.setText(String.format(getString(R.string.score), endTime));
+                    setBestScore(endTime);
+                    highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
                 }
             }
         });
     }
 
+    private void setBestScore(String endTime) {
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        String highScore = sharedPref.getString(getString(R.string.saved_high_score), "0:0");
+        if (newHighScore(highScore, endTime)) {
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.saved_high_score), endTime);
+            editor.apply();
+        }
+    }
+
+    private boolean newHighScore(String highScore, String endTime) {
+        String[] newSeparated = endTime.split(":");
+        String[] currentSeparated = highScore.split(":");
+        int currentMin = Integer.parseInt(currentSeparated[0]);
+        int currentSec = Integer.parseInt(currentSeparated[1]);
+        int newMin = Integer.parseInt(newSeparated[0]);
+        int newSec = Integer.parseInt(newSeparated[1]); // this will contain "Fruit"
+        return !(currentMin >= newMin && currentSec >= newSec);
+    }
+
+    private String getBestScore() {
+        SharedPreferences sharedPref = this.getSharedPreferences(
+                getString(R.string.preference_file_key), Context.MODE_PRIVATE);
+        return sharedPref.getString(getString(R.string.saved_high_score), "0:0");
+    }
+
     private void playMusic() {
-//        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.intro);
-//        backgroundMusic.setLooping(true);
-//        backgroundMusic.start();
+        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.intro);
+        backgroundMusic.setLooping(true);
+        backgroundMusic.start();
     }
 
     @Override
@@ -89,5 +123,11 @@ public class MainActivity extends Activity implements GameCallBack {
                             | View.SYSTEM_UI_FLAG_FULLSCREEN
                             | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
     }
 }
