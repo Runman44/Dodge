@@ -1,6 +1,5 @@
 package nl.sogeti.mranderson.gesturegameapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -27,9 +26,6 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
     private List<Block> sprites = new ArrayList<>();
     private MarkerView activeMarker;
     private Timer timer;
-    public static String endTime;
-    private boolean init = false;
-    private Activity atc;
     private GameCallBack mGameCallback;
 
     public GameView(Context context) {
@@ -97,10 +93,6 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
     @Override
     protected void onDraw(final Canvas canvas) {
-        if (!init) {
-            init = true;
-            GAME_STATE = 1;
-        }
         if (canvas != null) {
 
             canvas.drawColor(Color.WHITE);
@@ -109,14 +101,11 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
             for (Block sprite : sprites) {
                 sprite.onDraw(canvas);
             }
-
-
             if (GAME_STATE == 2) {
                 activeMarker.setActive(true);
 
                 for (Block sprite : sprites) {
                     if (sprite.isCollition(activeMarker.getX(), activeMarker.getY(), activeMarker.getActive())) {
-                        endTime = timer.getElapsedTime();
                         restart();
                     }
                 }
@@ -145,7 +134,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         GAME_STATE = -1;
         timer.restart();
         activeMarker.setActive(false);
-        mGameCallback.onGameOver(endTime);
+        mGameCallback.onGameOver(timer.getElapsedTime());
     }
 
 

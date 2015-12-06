@@ -70,6 +70,7 @@ public class MainActivity extends Activity implements GameCallBack {
 
     @Override
     public void onGameOver(final String endTime) {
+        playDeath();
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -81,6 +82,11 @@ public class MainActivity extends Activity implements GameCallBack {
                 }
             }
         });
+    }
+
+    private void playDeath() {
+        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.die);
+        backgroundMusic.start();
     }
 
     private void setBestScore(String endTime) {
