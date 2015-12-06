@@ -31,8 +31,8 @@
                     android:id="@+id/score"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="0"
                     android:gravity="center"
+                    android:text="0"
                     android:textColor="#787878"
                     android:textSize="50sp" />
 
@@ -40,8 +40,8 @@
                     android:id="@+id/best"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Best: 0"
                     android:gravity="center"
+                    android:text="Best: 0"
                     android:textColor="#ffF44336"
                     android:textSize="30sp" />
 
@@ -51,8 +51,8 @@
                 android:id="@+id/second"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_below="@+id/first"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="80dp"
                 android:orientation="horizontal">
 
@@ -121,7 +121,7 @@
                     android:layout_width="110dp"
                     android:layout_height="110dp"
                     android:adjustViewBounds="false"
-                    android:onClick="onStart"
+                    android:onClick="onRating"
                     android:src="@drawable/ic_favorite_white_36dp"
                     android:textColor="@android:color/white"
                     android:textSize="20sp"

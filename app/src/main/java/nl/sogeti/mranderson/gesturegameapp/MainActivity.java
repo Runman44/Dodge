@@ -1,10 +1,12 @@
 package nl.sogeti.mranderson.gesturegameapp;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
@@ -42,11 +44,26 @@ public class MainActivity extends Activity implements GameCallBack {
         startGame();
     }
 
+    public void onRating(View v) {
+        Uri uri = Uri.parse("market://details?id=" + this.getPackageName());
+        Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
+        // To count with Play market backstack, After pressing back button,
+        // to taken back to our application, we need to add following flags to intent.
+        goToMarket.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY |
+                Intent.FLAG_ACTIVITY_NEW_DOCUMENT |
+                Intent.FLAG_ACTIVITY_MULTIPLE_TASK);
+        try {
+            startActivity(goToMarket);
+        } catch (ActivityNotFoundException e) {
+            startActivity(new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("http://play.google.com/store/apps/details?id=" + this.getPackageName())));
+        }
+    }
 
 
     public void onShare(View v) {
         playClick();
-        String shareBody = "Check out my points:";
+        String shareBody = "Check out my score: " + getBestScore() + "! - Download - http://play.google.com/store/apps/details?id=" + this.getPackageName();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dodge Game" + "\n");
@@ -146,6 +163,7 @@ public class MainActivity extends Activity implements GameCallBack {
     protected void onPause() {
         super.onPause();
         backgroundMusic.pause();
+        gameView.forceRestart();
     }
 
     @Override

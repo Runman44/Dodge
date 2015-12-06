@@ -1,5 +1,6 @@
 package nl.sogeti.mranderson.gesturegameapp;
 
+import android.annotation.SuppressLint;
 import android.graphics.Canvas;
 
 public class GameLoopThread extends Thread {
@@ -10,6 +11,7 @@ public class GameLoopThread extends Thread {
         this.view = view;
     }
 
+    @SuppressLint("WrongCall")
     @Override
     public void run() {
         long ticksPS = 1000 / FPS;

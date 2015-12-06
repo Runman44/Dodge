@@ -53,6 +53,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
     }
 
     private void setup() {
+
         holder = getHolder();
         holder.addCallback(new SurfaceHolder.Callback() {
 
@@ -64,10 +65,12 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
             @Override
             public void surfaceCreated(SurfaceHolder holder) {
-                createSprites();
-                gameLoopThread = new GameLoopThread(GameView.this);
-                gameLoopThread.start();
-                setOnTouchListener(GameView.this);
+                if (gameLoopThread == null) {
+                    createSprites();
+                    gameLoopThread = new GameLoopThread(GameView.this);
+                    gameLoopThread.start();
+                    setOnTouchListener(GameView.this);
+                }
             }
 
             @Override
@@ -150,5 +153,9 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
     public void setGameCallback(GameCallBack cb) {
         this.mGameCallback = cb;
+    }
+
+    public void forceRestart() {
+        restart();
     }
 }
