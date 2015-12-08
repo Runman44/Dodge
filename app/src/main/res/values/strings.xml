@@ -3,8 +3,11 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="score">%1$s</string>
+    <string name="score">%1$d</string>
     <string name="preference_file_key">shared</string>
     <string name="saved_high_score">HIGH_SCORE</string>
-    <string name="highscore">Best: %1$s</string>
+    <string name="highscore">Best: %1$d</string>
+    <string name="signin_other_error">error</string>
+    <string name="app_id">461526553926</string>
+    <string name="leaderboard">CgkIxqqBqbcNEAIQAQ</string>
 </resources>

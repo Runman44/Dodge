@@ -1,6 +1,5 @@
 package nl.sogeti.mranderson.gesturegameapp;
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -10,14 +9,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.view.Window;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-public class MainActivity extends Activity implements GameCallBack {
-    /**
-     * Called when the activity is first created.
-     */
+import com.google.android.gms.games.Games;
+import com.google.example.games.basegameutils.BaseGameActivity;
+
+public class MainActivity extends BaseGameActivity implements GameCallBack {
+
     private GameView gameView;
     private RelativeLayout overlay;
     private TextView score;
@@ -27,7 +26,9 @@ public class MainActivity extends Activity implements GameCallBack {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
+
         setContentView(R.layout.activity_main);
         gameView = (GameView) findViewById(R.id.surfaceView1);
         overlay = (RelativeLayout) findViewById(R.id.overlay);
@@ -37,6 +38,7 @@ public class MainActivity extends Activity implements GameCallBack {
         highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
         playBackgroundMusic();
     }
+
 
     public void onStart(View v) {
         playClick();
@@ -62,17 +64,21 @@ public class MainActivity extends Activity implements GameCallBack {
 
 
     public void onShare(View v) {
-        playClick();
-        String shareBody = "Check out my score: " + getBestScore() + "! - Download - http://play.google.com/store/apps/details?id=" + this.getPackageName();
-        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-        sharingIntent.setType("text/plain");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dodge Game" + "\n");
-        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-        startActivity(Intent.createChooser(sharingIntent, ""));
+//        playClick();
+//        String shareBody = "Check out my score: " + getBestScore() + "! - Download - http://play.google.com/store/apps/details?id=" + this.getPackageName();
+//        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+//        sharingIntent.setType("text/plain");
+//        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dodge Game" + "\n");
+//        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+//        startActivity(Intent.createChooser(sharingIntent, ""));
+
+        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
+                getApiClient(), getString(R.string.leaderboard)),
+                2);
     }
 
     private void startGame() {
-        gameView.prepareTime();
+        gameView.prepare();
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -86,16 +92,21 @@ public class MainActivity extends Activity implements GameCallBack {
     }
 
     @Override
-    public void onGameOver(final String endTime) {
-        playDeath();
+    public void onGameOver(final long endTime, final boolean isDeath) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 overlay.setVisibility(View.VISIBLE);
-                if (!endTime.equals("")) {
-                    score.setText(String.format(getString(R.string.score), endTime));
-                    setBestScore(endTime);
-                    highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
+                if (isDeath) {
+                    playDeath();
+                }
+                score.setText(String.format(getString(R.string.score), endTime));
+                setBestScore(endTime);
+                highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
+                if(getApiClient().isConnected()){
+
+                    Games.Leaderboards.submitScore(getApiClient(),
+                            getString(R.string.leaderboard), getBestScore());
                 }
             }
         });
@@ -106,31 +117,21 @@ public class MainActivity extends Activity implements GameCallBack {
         backgroundMusic.start();
     }
 
-    private void setBestScore(String endTime) {
+    private void setBestScore(long endTime) {
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        String highScore = sharedPref.getString(getString(R.string.saved_high_score), "0:0");
-        if (newHighScore(highScore, endTime)) {
+        long highScore = sharedPref.getLong(getString(R.string.saved_high_score), 0);
+        if (highScore < endTime) {
             SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.saved_high_score), endTime);
+            editor.putLong(getString(R.string.saved_high_score), endTime);
             editor.apply();
         }
     }
 
-    private boolean newHighScore(String highScore, String endTime) {
-        String[] newSeparated = endTime.split(":");
-        String[] currentSeparated = highScore.split(":");
-        int currentMin = Integer.parseInt(currentSeparated[0]);
-        int currentSec = Integer.parseInt(currentSeparated[1]);
-        int newMin = Integer.parseInt(newSeparated[0]);
-        int newSec = Integer.parseInt(newSeparated[1]); // this will contain "Fruit"
-        return !(currentMin >= newMin && currentSec >= newSec);
-    }
-
-    private String getBestScore() {
+    private long getBestScore() {
         SharedPreferences sharedPref = this.getSharedPreferences(
                 getString(R.string.preference_file_key), Context.MODE_PRIVATE);
-        return sharedPref.getString(getString(R.string.saved_high_score), "0:0");
+        return sharedPref.getLong(getString(R.string.saved_high_score), 0);
     }
 
     private void playBackgroundMusic() {
@@ -170,5 +171,16 @@ public class MainActivity extends Activity implements GameCallBack {
     protected void onResume() {
         super.onResume();
         backgroundMusic.start();
+    }
+
+
+    @Override
+    public void onSignInFailed() {
+
+    }
+
+    @Override
+    public void onSignInSucceeded() {
+
     }
 }

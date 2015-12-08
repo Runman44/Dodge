@@ -5,5 +5,5 @@ package nl.sogeti.mranderson.gesturegameapp;
  */
 public interface GameCallBack {
 
-    void onGameOver(String endTime);
+    void onGameOver(long endTime, boolean isDeath);
 }

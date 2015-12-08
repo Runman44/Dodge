@@ -13,12 +13,13 @@ public class MarkerView {
     private float x = 0;
     private float y = 0;
     private boolean active = false;
+    private boolean isDeath = false;
 
     public void onDraw(Canvas canvas) {
         canvas.drawCircle(x, y, 30, getPaint());
     }
 
-    public void setActive(boolean active){
+    public void setActive(boolean active) {
         this.active = active;
     }
 
@@ -71,5 +72,13 @@ public class MarkerView {
 
     public boolean getActive() {
         return active;
+    }
+
+    public boolean getIsDeath() {
+        return this.isDeath;
+    }
+
+    public void setIsDeath(boolean isDeath) {
+        this.isDeath = isDeath;
     }
 }

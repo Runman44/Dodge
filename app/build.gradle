@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'android'
+            keyPassword 'Dander1992'
+            storeFile file('/Users/MrAnderson1/AndroidStudioProjects/KeyStores/android.jks')
+            storePassword 'Dander1992'
+        }
+    }
     compileSdkVersion 22
-    buildToolsVersion "22.0.1"
-
+    buildToolsVersion '23.0.2'
     defaultConfig {
         applicationId "nl.mranderson.dodge"
         minSdkVersion 16
@@ -24,4 +31,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:22.2.0'
     compile 'com.android.support:design:22.2.0'
     compile 'com.github.markushi:circlebutton:1.1'
+    compile 'com.google.android.gms:play-services:8.3.0'
+    compile project(':BaseGameUtils')
 }

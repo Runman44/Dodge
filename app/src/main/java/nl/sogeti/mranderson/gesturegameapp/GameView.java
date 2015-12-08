@@ -27,6 +27,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
     private MarkerView activeMarker;
     private Timer timer;
     private GameCallBack mGameCallback;
+    private boolean playing = false;
 
     public GameView(Context context) {
         super(context);
@@ -99,8 +100,10 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         if (canvas != null) {
 
             canvas.drawColor(Color.WHITE);
-            activeMarker.onDraw(canvas);
-            timer.onDraw(canvas);
+            if (playing) {
+                activeMarker.onDraw(canvas);
+                timer.onDraw(canvas);
+            }
             for (Block sprite : sprites) {
                 sprite.onDraw(canvas);
             }
@@ -109,6 +112,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
                 for (Block sprite : sprites) {
                     if (sprite.isCollition(activeMarker.getX(), activeMarker.getY(), activeMarker.getActive())) {
+                        activeMarker.setIsDeath(true);
                         restart();
                     }
                 }
@@ -135,14 +139,18 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
 
     private void restart() {
         GAME_STATE = -1;
-        timer.restart();
+        playing = false;
         activeMarker.setActive(false);
-        mGameCallback.onGameOver(timer.getElapsedTime());
+        mGameCallback.onGameOver(timer.getT(), activeMarker.getIsDeath());
+        timer.restart();
+        activeMarker.setIsDeath(false);
     }
 
 
-    public void prepareTime() {
+    public void prepare() {
+        activeMarker.setIsDeath(false);
         timer.prepareTime();
+        playing = true;
     }
 
     public void startTime() {

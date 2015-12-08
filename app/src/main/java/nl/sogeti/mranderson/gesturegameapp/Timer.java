@@ -13,7 +13,7 @@ public class Timer {
     private int x = 0;
     private int y = 0;
     private Paint p;
-    private String t = "";
+    private long t = 0;
     private boolean started = false;
 
     public Timer(GameView gameView) {
@@ -36,40 +36,37 @@ public class Timer {
 
     private void update() {
         if (started) {
-            t = getElapsedTimeMin() + ":" + getElapsedTimeSecs();
+            t = getElapsedTimeSecs();
         }
     }
 
     public void onDraw(Canvas canvas) {
         update();
-        canvas.drawText(t, x, y, p);
+        canvas.drawText(t + "", x, y, p);
     }
 
-    public String getElapsedTime() {
-        return getElapsedTimeMin() + ":" + getElapsedTimeSecs();
+    public long getElapsedTime() {
+        return getElapsedTimeSecs();
     }
 
     //elaspsed time in seconds
     public long getElapsedTimeSecs() {
-        long elapsed = 0;
-        elapsed = ((System.currentTimeMillis() - startTime) / 1000 % 60);
+        long elapsed;
+        elapsed = ((System.currentTimeMillis() - startTime) / 1000);
         return elapsed;
     }
 
-    //elaspsed time in minutes
-    public long getElapsedTimeMin() {
-        long elapsed = 0;
-        elapsed = (((System.currentTimeMillis() - startTime) / 1000) / 60) % 60;
-        return elapsed;
-    }
 
     public void restart() {
         this.started = false;
-        this.t = "";
+        this.t = 0;
     }
 
     public void prepareTime() {
-        t = "0:0";
+        t = 0;
     }
 
+    public long getT() {
+        return t;
+    }
 }

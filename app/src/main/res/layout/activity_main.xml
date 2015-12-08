@@ -3,11 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#ffF44336"
     tools:context=".MainActivity">
+
+
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_marginBottom="60dp"
+        android:layout_marginTop="30dp">
 
         <nl.sogeti.mranderson.gesturegameapp.GameView
             android:id="@+id/surfaceView1"
@@ -53,7 +58,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/first"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="50dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -89,13 +94,13 @@
                 android:layout_below="@+id/second"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
-                android:orientation="horizontal"
-                android:paddingTop="130dp">
+                android:layout_marginTop="50dp"
+                android:orientation="horizontal">
 
                 <at.markushi.ui.CircleButton
                     android:id="@+id/share"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:adjustViewBounds="true"
                     android:onClick="onShare"
                     android:src="@drawable/ic_share_white_36dp"
@@ -106,8 +111,8 @@
 
                 <at.markushi.ui.CircleButton
                     android:id="@+id/start"
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
+                    android:layout_width="120dp"
+                    android:layout_height="120dp"
                     android:adjustViewBounds="false"
                     android:onClick="onStart"
                     android:src="@drawable/ic_play_arrow_white_48dp"
@@ -118,8 +123,8 @@
 
                 <at.markushi.ui.CircleButton
                     android:id="@+id/rate"
-                    android:layout_width="110dp"
-                    android:layout_height="110dp"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
                     android:adjustViewBounds="false"
                     android:onClick="onRating"
                     android:src="@drawable/ic_favorite_white_36dp"
