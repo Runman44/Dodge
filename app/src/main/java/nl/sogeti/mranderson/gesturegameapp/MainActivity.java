@@ -21,13 +21,14 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     private GameView gameView;
     private RelativeLayout overlay;
     private TextView score;
-    private TextView highscore;
+    private TextView highScore;
     private MediaPlayer backgroundMusic;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // TODO is this needed for the GAME?
         //requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_main);
@@ -35,8 +36,8 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
         overlay = (RelativeLayout) findViewById(R.id.overlay);
         gameView.setGameCallback(this);
         score = (TextView) findViewById(R.id.score);
-        highscore = (TextView) findViewById(R.id.best);
-        highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
+        highScore = (TextView) findViewById(R.id.best);
+        highScore.setText(String.format(getString(R.string.highscore), getBestScore()));
         playBackgroundMusic();
     }
 
@@ -77,7 +78,7 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
 
     public void onStats(View v) {
         playClick();
-        if(getApiClient().isConnected()) {
+        if (getApiClient().isConnected()) {
             startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
                     getApiClient(), getString(R.string.leaderboard)),
                     LEADERBOARD);
@@ -88,7 +89,7 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
 
     public void onAchievements(View v) {
         playClick();
-        if(getApiClient().isConnected()) {
+        if (getApiClient().isConnected()) {
             startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
                     getApiClient(), getString(R.string.leaderboard)),
                     ACHIEVEMENTS);
@@ -113,7 +114,7 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
                     setBestScore(endTime);
                 }
                 score.setText(String.format(getString(R.string.score), endTime));
-                highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
+                highScore.setText(String.format(getString(R.string.highscore), getBestScore()));
                 if (getApiClient().isConnected()) {
                     Games.Leaderboards.submitScore(getApiClient(),
                             getString(R.string.leaderboard), getBestScore());
@@ -185,14 +186,13 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
         backgroundMusic.start();
     }
 
-
     @Override
     public void onSignInFailed() {
-
+        // TODO - the right thing.
     }
 
     @Override
     public void onSignInSucceeded() {
-
+        // TODO - the right thing.
     }
 }
