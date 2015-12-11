@@ -3,6 +3,7 @@ package nl.sogeti.mranderson.gesturegameapp;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.os.Handler;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -18,7 +19,6 @@ import java.util.List;
 
 public class GameView extends SurfaceView implements View.OnTouchListener {
 
-    public static int GAME_STATE = 0;
     private static int MIN_DXDY = 2;
     private final GameView gameView;
     private SurfaceHolder holder;
@@ -27,7 +27,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
     private MarkerView activeMarker;
     private Timer timer;
     private GameCallBack mGameCallback;
-    private boolean playing = false;
+    private GAME_STATE STATE = GAME_STATE.MENU;
 
     public GameView(Context context) {
         super(context);
@@ -100,20 +100,22 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         if (canvas != null) {
 
             canvas.drawColor(Color.WHITE);
-            if (playing) {
-                activeMarker.onDraw(canvas);
-                timer.onDraw(canvas);
-            }
             for (Block sprite : sprites) {
                 sprite.onDraw(canvas);
             }
-            if (GAME_STATE == 2) {
-                activeMarker.setActive(true);
 
+            if (STATE == GAME_STATE.PREPARE) {
+                activeMarker.onDraw(canvas);
+                timer.onDraw(canvas);
+            }
+
+            if (STATE == GAME_STATE.PLAYING) {
+                activeMarker.onDraw(canvas);
+                timer.onDraw(canvas);
                 for (Block sprite : sprites) {
                     if (sprite.isCollition(activeMarker.getX(), activeMarker.getY(), activeMarker.getActive())) {
+                        setGameOverState();
                         activeMarker.setIsDeath(true);
-                        restart();
                     }
                 }
             }
@@ -137,33 +139,41 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         return true;
     }
 
-    private void restart() {
-        GAME_STATE = -1;
-        playing = false;
+    public void setGameCallback(GameCallBack cb) {
+        this.mGameCallback = cb;
+    }
+
+    public void setStartState() {
+        activeMarker.setIsDeath(false);
+        STATE = GAME_STATE.PREPARE;
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                setStartPlayingState();
+            }
+        }, 3000);
+    }
+
+    public void setStartPlayingState() {
+        STATE = GAME_STATE.PLAYING;
+        timer.startTime();
+        activeMarker.setActive(true);
+    }
+
+    public void setGameOverState() {
+        STATE = GAME_STATE.MENU;
         activeMarker.setActive(false);
         mGameCallback.onGameOver(timer.getT(), activeMarker.getIsDeath());
         timer.restart();
         activeMarker.setIsDeath(false);
     }
 
+    public enum GAME_STATE {
 
-    public void prepare() {
-        activeMarker.setIsDeath(false);
-        timer.prepareTime();
-        playing = true;
-    }
+        MENU,
 
-    public void startTime() {
-        GAME_STATE = 2;
-        timer.startTime();
-    }
+        PREPARE,
 
-
-    public void setGameCallback(GameCallBack cb) {
-        this.mGameCallback = cb;
-    }
-
-    public void forceRestart() {
-        restart();
+        PLAYING;
     }
 }

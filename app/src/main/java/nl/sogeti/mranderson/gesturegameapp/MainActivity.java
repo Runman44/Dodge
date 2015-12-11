@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -17,6 +16,8 @@ import com.google.example.games.basegameutils.BaseGameActivity;
 
 public class MainActivity extends BaseGameActivity implements GameCallBack {
 
+    private static final int ACHIEVEMENTS = 1;
+    private static final int LEADERBOARD = 2;
     private GameView gameView;
     private RelativeLayout overlay;
     private TextView score;
@@ -43,10 +44,11 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     public void onStart(View v) {
         playClick();
         removeOverlay();
-        startGame();
+        gameView.setStartState();
     }
 
     public void onRating(View v) {
+        playClick();
         Uri uri = Uri.parse("market://details?id=" + this.getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market backstack, After pressing back button,
@@ -64,28 +66,37 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
 
 
     public void onShare(View v) {
-//        playClick();
-//        String shareBody = "Check out my score: " + getBestScore() + "! - Download - http://play.google.com/store/apps/details?id=" + this.getPackageName();
-//        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
-//        sharingIntent.setType("text/plain");
-//        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dodge Game" + "\n");
-//        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
-//        startActivity(Intent.createChooser(sharingIntent, ""));
-
-        startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
-                getApiClient(), getString(R.string.leaderboard)),
-                2);
+        playClick();
+        String shareBody = "Check out my score: " + getBestScore() + "! - Download - http://play.google.com/store/apps/details?id=" + this.getPackageName();
+        Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
+        sharingIntent.setType("text/plain");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Dodge Game" + "\n");
+        sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
+        startActivity(Intent.createChooser(sharingIntent, ""));
     }
 
-    private void startGame() {
-        gameView.prepare();
-        Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                gameView.startTime();
-            }
-        }, 3000);
+    public void onStats(View v) {
+        playClick();
+        if(getApiClient().isConnected()) {
+            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
+                    getApiClient(), getString(R.string.leaderboard)),
+                    LEADERBOARD);
+        } else {
+            getApiClient().reconnect();
+        }
     }
+
+    public void onAchievements(View v) {
+        playClick();
+        if(getApiClient().isConnected()) {
+            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
+                    getApiClient(), getString(R.string.leaderboard)),
+                    ACHIEVEMENTS);
+        } else {
+            getApiClient().reconnect();
+        }
+    }
+
 
     private void removeOverlay() {
         overlay.setVisibility(View.GONE);
@@ -99,22 +110,16 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
                 overlay.setVisibility(View.VISIBLE);
                 if (isDeath) {
                     playDeath();
+                    setBestScore(endTime);
                 }
                 score.setText(String.format(getString(R.string.score), endTime));
-                setBestScore(endTime);
                 highscore.setText(String.format(getString(R.string.highscore), getBestScore()));
-                if(getApiClient().isConnected()){
-
+                if (getApiClient().isConnected()) {
                     Games.Leaderboards.submitScore(getApiClient(),
                             getString(R.string.leaderboard), getBestScore());
                 }
             }
         });
-    }
-
-    private void playDeath() {
-        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.die);
-        backgroundMusic.start();
     }
 
     private void setBestScore(long endTime) {
@@ -134,6 +139,8 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
         return sharedPref.getLong(getString(R.string.saved_high_score), 0);
     }
 
+    // <-----SOUND----->
+
     private void playBackgroundMusic() {
         backgroundMusic = MediaPlayer.create(this, R.raw.background);
         backgroundMusic.setVolume(0.5f, 0.5f);
@@ -142,8 +149,13 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     }
 
     private void playClick() {
-        MediaPlayer backgroundMusic = MediaPlayer.create(this, R.raw.click);
-        backgroundMusic.start();
+        MediaPlayer clickMusic = MediaPlayer.create(this, R.raw.click);
+        clickMusic.start();
+    }
+
+    private void playDeath() {
+        MediaPlayer deathMusic = MediaPlayer.create(this, R.raw.die);
+        deathMusic.start();
     }
 
     @Override
@@ -164,7 +176,7 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     protected void onPause() {
         super.onPause();
         backgroundMusic.pause();
-        gameView.forceRestart();
+        gameView.setGameOverState();
     }
 
     @Override

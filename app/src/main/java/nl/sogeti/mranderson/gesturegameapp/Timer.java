@@ -45,10 +45,6 @@ public class Timer {
         canvas.drawText(t + "", x, y, p);
     }
 
-    public long getElapsedTime() {
-        return getElapsedTimeSecs();
-    }
-
     //elaspsed time in seconds
     public long getElapsedTimeSecs() {
         long elapsed;
@@ -60,10 +56,6 @@ public class Timer {
     public void restart() {
         this.started = false;
         this.t = 0;
-    }
-
-    public void prepareTime() {
-        t = 0;
     }
 
     public long getT() {

@@ -19,11 +19,6 @@ public class MarkerView {
         canvas.drawCircle(x, y, 30, getPaint());
     }
 
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-
     private Paint getPaint() {
         Paint paint = new Paint();
         paint.setAntiAlias(true);
@@ -41,9 +36,7 @@ public class MarkerView {
         this.gameView = gameView;
         x = gameView.getWidth() / 2;
         y = gameView.getHeight() / 2;
-
     }
-
 
     public float getX() {
         return x;
@@ -72,6 +65,10 @@ public class MarkerView {
 
     public boolean getActive() {
         return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public boolean getIsDeath() {

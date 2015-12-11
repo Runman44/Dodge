@@ -7,7 +7,6 @@
     tools:context=".MainActivity">
 
 
-
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -61,19 +60,10 @@
                 android:layout_marginTop="50dp"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:id="@+id/title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text="D"
-                    android:textColor="#ffF44336"
-                    android:textSize="90sp" />
-
                 <at.markushi.ui.CircleButton
                     android:id="@+id/ball"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
                     android:baselineAlignBottom="true"
                     app:cb_color="#FF212121" />
 
@@ -81,57 +71,126 @@
                     android:id="@+id/title2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif"
-                    android:text="dge"
+                    android:text="D"
                     android:textColor="#ffF44336"
-                    android:textSize="90sp" />
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/title3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="O"
+                    android:textColor="#FF212121"
+                    android:textSize="50sp" />
+
+                <TextView
+                    android:id="@+id/title4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="DGE"
+                    android:textColor="#ffF44336"
+                    android:textSize="50sp" />
+
+                <at.markushi.ui.CircleButton
+                    android:id="@+id/ball2"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:baselineAlignBottom="true"
+                    app:cb_color="#FF212121" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/second"
+                android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="50dp"
+                android:layout_marginBottom="15dp"
                 android:orientation="horizontal">
 
-                <at.markushi.ui.CircleButton
-                    android:id="@+id/share"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:adjustViewBounds="true"
-                    android:onClick="onShare"
-                    android:src="@drawable/ic_share_white_36dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    app:cb_color="#787878"
-                    app:cb_pressedRingWidth="15dip" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
 
-                <at.markushi.ui.CircleButton
-                    android:id="@+id/start"
-                    android:layout_width="120dp"
-                    android:layout_height="120dp"
-                    android:adjustViewBounds="false"
-                    android:onClick="onStart"
-                    android:src="@drawable/ic_play_arrow_white_48dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    app:cb_color="#ffF44336"
-                    app:cb_pressedRingWidth="15dip" />
+                    <at.markushi.ui.CircleButton
+                        android:id="@+id/share"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:adjustViewBounds="true"
+                        android:onClick="onShare"
+                        android:src="@drawable/ic_share_white_36dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        app:cb_color="#787878"
+                        app:cb_pressedRingWidth="15dip" />
 
-                <at.markushi.ui.CircleButton
-                    android:id="@+id/rate"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
-                    android:adjustViewBounds="false"
-                    android:onClick="onRating"
-                    android:src="@drawable/ic_favorite_white_36dp"
-                    android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    app:cb_color="#787878"
-                    app:cb_pressedRingWidth="15dip" />
+                    <at.markushi.ui.CircleButton
+                        android:id="@+id/stats"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:adjustViewBounds="true"
+                        android:onClick="onStats"
+                        android:src="@drawable/ic_timeline_white_36dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        app:cb_color="#787878"
+                        app:cb_pressedRingWidth="15dip" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="vertical">
+
+
+                    <at.markushi.ui.CircleButton
+                        android:id="@+id/start"
+                        android:layout_width="120dp"
+                        android:layout_height="120dp"
+                        android:adjustViewBounds="false"
+                        android:onClick="onStart"
+                        android:src="@drawable/ic_play_arrow_white_48dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        app:cb_color="#ffF44336"
+                        app:cb_pressedRingWidth="15dip" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <at.markushi.ui.CircleButton
+                        android:id="@+id/rate"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:adjustViewBounds="false"
+                        android:onClick="onRating"
+                        android:src="@drawable/ic_favorite_white_36dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        app:cb_color="#787878"
+                        app:cb_pressedRingWidth="15dip" />
+
+                    <at.markushi.ui.CircleButton
+                        android:id="@+id/achievements"
+                        android:layout_width="100dp"
+                        android:layout_height="100dp"
+                        android:adjustViewBounds="false"
+                        android:onClick="onAchievements"
+                        android:src="@drawable/ic_info_outline_white_36dp"
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        app:cb_color="#787878"
+                        app:cb_pressedRingWidth="15dip" />
+
+                </LinearLayout>
+
 
             </LinearLayout>
         </RelativeLayout>
