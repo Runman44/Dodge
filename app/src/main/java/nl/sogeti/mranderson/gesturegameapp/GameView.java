@@ -87,7 +87,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         timer = new Timer(this);
         sprites.add(new Block(this));
         sprites.add(new Block(this));
-        sprites.add(new Block(this));
+        sprites.add(new RedBlock(this));
         sprites.add(new Block(this));
         sprites.add(new Block(this));
         sprites.add(new Block(this));
@@ -113,9 +113,9 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
                 activeMarker.onDraw(canvas);
                 timer.onDraw(canvas);
                 for (Block sprite : sprites) {
-                    if (sprite.isCollition(activeMarker.getX(), activeMarker.getY(), activeMarker.getActive())) {
-                        setGameOverState();
+                    if (sprite.isCollition(activeMarker.getSize(), activeMarker.getX(), activeMarker.getY(), activeMarker.getActive())) {
                         activeMarker.setIsDeath(true);
+                        setGameOverState();
                     }
                 }
             }

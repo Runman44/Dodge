@@ -22,7 +22,7 @@ public class Timer {
         p.setColor(Color.BLACK);
         p.setStyle(Paint.Style.FILL);
         p.setAlpha(70);
-        p.setTextSize(200);
+        p.setTextSize(gameView.getHeight() / 8);
         p.setTextAlign(Paint.Align.CENTER);
         x = gameView.getWidth() / 2;
         y = (int) ((gameView.getHeight() / 2) - ((p.descent() + p.ascent()) / 2));

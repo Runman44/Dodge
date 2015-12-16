@@ -10,13 +10,14 @@ import android.graphics.Paint;
 public class MarkerView {
 
     private final GameView gameView;
+    private int size;
     private float x = 0;
     private float y = 0;
     private boolean active = false;
     private boolean isDeath = false;
 
     public void onDraw(Canvas canvas) {
-        canvas.drawCircle(x, y, 30, getPaint());
+        canvas.drawCircle(x, y, size, getPaint());
     }
 
     private Paint getPaint() {
@@ -34,6 +35,7 @@ public class MarkerView {
 
     public MarkerView(GameView gameView) {
         this.gameView = gameView;
+        size = gameView.getHeight() / 30;
         x = gameView.getWidth() / 2;
         y = gameView.getHeight() / 2;
     }
@@ -47,15 +49,15 @@ public class MarkerView {
     }
 
     public void setLoc(float x, float y) {
-        if (x > gameView.getWidth() - 30) {
-            this.x = gameView.getWidth() - 30;
+        if (x > gameView.getWidth() - size) {
+            this.x = gameView.getWidth() - size;
         } else if (x < 0) {
-            this.x = 30;
+            this.x = size;
         }
-        if (y > gameView.getHeight() - 30) {
-            this.y = gameView.getHeight() - 30;
+        if (y > gameView.getHeight() - size) {
+            this.y = gameView.getHeight() - size;
         } else if (y < 0) {
-            this.y = 30;
+            this.y = size;
         } else {
             this.x = x;
             this.y = y;
@@ -77,5 +79,9 @@ public class MarkerView {
 
     public void setIsDeath(boolean isDeath) {
         this.isDeath = isDeath;
+    }
+
+    public int getSize() {
+        return size;
     }
 }

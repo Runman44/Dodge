@@ -13,6 +13,7 @@ public class Block {
 
     private int x = 0;
     private int y = 0;
+    private int size;
     private int ySpeed;
     private int xSpeed;
     private GameView gameView;
@@ -20,9 +21,10 @@ public class Block {
 
     public Block(GameView gameView) {
         this.gameView = gameView;
+        size = gameView.getHeight() / 20;
         Random rnd = new Random();
-        x = rnd.nextInt(gameView.getWidth() - 60);
-        y = rnd.nextInt(gameView.getHeight() - 60);
+        x = rnd.nextInt(gameView.getWidth() - size);
+        y = rnd.nextInt(gameView.getHeight() - size);
         xSpeed = rnd.nextInt(25);
         ySpeed = rnd.nextInt(25);
         p = new Paint();
@@ -38,12 +40,17 @@ public class Block {
         ySpeed = rnd.nextInt(speed);
     }
 
+    public Paint getPaint() {
+        return p;
+    }
+
+
     private void update() {
-        if (x > gameView.getWidth() - 60 - xSpeed || x + xSpeed < 0) {
+        if (x > gameView.getWidth() - size - xSpeed || x + xSpeed < 0) {
             xSpeed = -xSpeed;
         }
         x = x + xSpeed;
-        if (y > gameView.getHeight() - 60 - ySpeed || y + ySpeed < 0) {
+        if (y > gameView.getHeight() - size - ySpeed || y + ySpeed < 0) {
             ySpeed = -ySpeed;
         }
         y = y + ySpeed;
@@ -51,17 +58,17 @@ public class Block {
 
     public void onDraw(Canvas canvas) {
         update();
-        canvas.drawRect(x, y, x + 60, y + 60, p);
+        canvas.drawRect(x, y, x + size, y + size, getPaint());
     }
 
-    public boolean isCollition(float x2, float y2, boolean active) {
-        if(!active)
+    public boolean isCollition(float markerSize, float x2, float y2, boolean active) {
+        if (!active)
             return false;
-        float distX = Math.abs(x2 - (this.x + 30));
-        float distY = Math.abs(y2 - (this.y + 30));
-        if (distX > (30 + 30) || distY > (30 + 30)) {
+        float distX = Math.abs(x2 - (this.x + markerSize));
+        float distY = Math.abs(y2 - (this.y + markerSize));
+        if (distX > (markerSize + markerSize) || distY > (markerSize + markerSize)) {
             return false;
-        } else if (distX <= (60) || distY <= (60)) {
+        } else if (distX <= (size) || distY <= (size)) {
             return true;
         }
         return false;

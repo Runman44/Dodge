@@ -28,9 +28,6 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // TODO is this needed for the GAME?
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
-
         setContentView(R.layout.activity_main);
         gameView = (GameView) findViewById(R.id.surfaceView1);
         overlay = (RelativeLayout) findViewById(R.id.overlay);
@@ -46,10 +43,24 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
         playClick();
         removeOverlay();
         gameView.setStartState();
+        newAchievement("CgkIxqqBqbcNEAIQCw");
+    }
+
+    private void newAchievement(String id) {
+        if (getApiClient().isConnected()) {
+            Games.Achievements.unlock(getApiClient(), id);
+        }
+    }
+
+    private void newIncrementAchievement(String id) {
+        if (getApiClient().isConnected()) {
+            Games.Achievements.increment(getApiClient(), id, 1);
+        }
     }
 
     public void onRating(View v) {
         playClick();
+        newAchievement("CgkIxqqBqbcNEAIQBg");
         Uri uri = Uri.parse("market://details?id=" + this.getPackageName());
         Intent goToMarket = new Intent(Intent.ACTION_VIEW, uri);
         // To count with Play market backstack, After pressing back button,
@@ -68,6 +79,7 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
 
     public void onShare(View v) {
         playClick();
+        newAchievement("CgkIxqqBqbcNEAIQBQ");
         String shareBody = "Check out my score: " + getBestScore() + "! - Download - http://play.google.com/store/apps/details?id=" + this.getPackageName();
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
@@ -90,8 +102,7 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     public void onAchievements(View v) {
         playClick();
         if (getApiClient().isConnected()) {
-            startActivityForResult(Games.Leaderboards.getLeaderboardIntent(
-                    getApiClient(), getString(R.string.leaderboard)),
+            startActivityForResult(Games.Achievements.getAchievementsIntent(getApiClient()),
                     ACHIEVEMENTS);
         } else {
             getApiClient().reconnect();
@@ -111,8 +122,12 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
                 overlay.setVisibility(View.VISIBLE);
                 if (isDeath) {
                     playDeath();
-                    setBestScore(endTime);
+                    newIncrementAchievement("CgkIxqqBqbcNEAIQDA");
+                    newIncrementAchievement("CgkIxqqBqbcNEAIQDQ");
+                    newIncrementAchievement("CgkIxqqBqbcNEAIQDg");
                 }
+                setBestScore(endTime);
+                isAchievement(endTime);
                 score.setText(String.format(getString(R.string.score), endTime));
                 highScore.setText(String.format(getString(R.string.highscore), getBestScore()));
                 if (getApiClient().isConnected()) {
@@ -121,6 +136,20 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
                 }
             }
         });
+    }
+
+    private void isAchievement(long endTime) {
+        if (getApiClient().isConnected()) {
+            if (endTime >= 20) {
+                Games.Achievements.unlock(getApiClient(), "CgkIxqqBqbcNEAIQAg");
+            }
+            if (endTime >= 60) {
+                Games.Achievements.unlock(getApiClient(), "CgkIxqqBqbcNEAIQAw");
+            }
+            if (endTime >= 180) {
+                Games.Achievements.unlock(getApiClient(), "CgkIxqqBqbcNEAIQBA");
+            }
+        }
     }
 
     private void setBestScore(long endTime) {

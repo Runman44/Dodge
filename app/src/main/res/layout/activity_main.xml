@@ -183,7 +183,7 @@
                         android:layout_height="100dp"
                         android:adjustViewBounds="false"
                         android:onClick="onAchievements"
-                        android:src="@drawable/ic_info_outline_white_36dp"
+                        android:src="@drawable/ic_grade_white_36dp"
                         android:textColor="@android:color/white"
                         android:textSize="20sp"
                         app:cb_color="#787878"
