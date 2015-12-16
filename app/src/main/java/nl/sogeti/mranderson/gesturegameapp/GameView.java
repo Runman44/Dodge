@@ -151,7 +151,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
             public void run() {
                 setStartPlayingState();
             }
-        }, 3000);
+        }, 1500);
     }
 
     public void setStartPlayingState() {
