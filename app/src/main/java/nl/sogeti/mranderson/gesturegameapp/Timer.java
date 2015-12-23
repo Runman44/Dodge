@@ -15,6 +15,7 @@ public class Timer {
     private Paint p;
     private long t = 0;
     private boolean started = false;
+    private TimeCallBack mTimeCallback;
 
     public Timer(GameView gameView) {
         p = new Paint();
@@ -36,8 +37,18 @@ public class Timer {
 
     private void update() {
         if (started) {
+            checkTime();
             t = getElapsedTimeSecs();
         }
+    }
+
+    private void checkTime() {
+        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 10 == 0)
+            mTimeCallback.onFiveSeconds();
+    }
+
+    public void setTimeCallback(TimeCallBack cb) {
+        this.mTimeCallback = cb;
     }
 
     public void onDraw(Canvas canvas) {

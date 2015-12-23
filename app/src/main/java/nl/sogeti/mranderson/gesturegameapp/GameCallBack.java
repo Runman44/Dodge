@@ -6,4 +6,6 @@ package nl.sogeti.mranderson.gesturegameapp;
 public interface GameCallBack {
 
     void onGameOver(long endTime, boolean isDeath);
+
+    void onBonusTouched();
 }

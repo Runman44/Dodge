@@ -11,13 +11,14 @@ import android.view.SurfaceView;
 import android.view.View;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by MrAnderson1 on 20/06/15.
  */
 
-public class GameView extends SurfaceView implements View.OnTouchListener {
+public class GameView extends SurfaceView implements View.OnTouchListener, TimeCallBack {
 
     private static int MIN_DXDY = 2;
     private final GameView gameView;
@@ -87,7 +88,6 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         timer = new Timer(this);
         sprites.add(new Block(this));
         sprites.add(new Block(this));
-        sprites.add(new RedBlock(this));
         sprites.add(new Block(this));
         sprites.add(new Block(this));
         sprites.add(new Block(this));
@@ -112,14 +112,33 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
             if (STATE == GAME_STATE.PLAYING) {
                 activeMarker.onDraw(canvas);
                 timer.onDraw(canvas);
-                for (Block sprite : sprites) {
+
+
+                Iterator<Block> i = sprites.iterator();
+                while (i.hasNext()) {
+                    Block sprite = i.next(); // must be called before you can call i.remove()
+
                     if (sprite.isCollition(activeMarker.getSize(), activeMarker.getX(), activeMarker.getY(), activeMarker.getActive())) {
-                        activeMarker.setIsDeath(true);
-                        setGameOverState();
+                        if (sprite instanceof GreenBlock) {
+                            i.remove();
+                            setBonusTouched();
+                            for (Block sprite2 : sprites) {
+                                sprite2.decreaseSpeed();
+                            }
+                        } else {
+                            activeMarker.setIsDeath(true);
+                            setGameOverState();
+                            break;
+                        }
                     }
                 }
+
             }
         }
+    }
+
+    private void setBonusTouched() {
+        mGameCallback.onBonusTouched();
     }
 
     @Override
@@ -158,14 +177,37 @@ public class GameView extends SurfaceView implements View.OnTouchListener {
         STATE = GAME_STATE.PLAYING;
         timer.startTime();
         activeMarker.setActive(true);
+        timer.setTimeCallback(this);
     }
 
     public void setGameOverState() {
         STATE = GAME_STATE.MENU;
-        activeMarker.setActive(false);
         mGameCallback.onGameOver(timer.getT(), activeMarker.getIsDeath());
+        setRestartState();
+    }
+
+    private void setRestartState() {
+        activeMarker.setActive(false);
         timer.restart();
         activeMarker.setIsDeath(false);
+        Iterator<Block> i = sprites.iterator();
+        while (i.hasNext()) {
+            Block sprite = i.next();
+            if (sprite instanceof GreenBlock) {
+                i.remove();
+            }
+        }
+    }
+
+    @Override
+    public void onMinute() {
+
+    }
+
+    @Override
+    public void onFiveSeconds() {
+        GreenBlock greenBlock = new GreenBlock(this);
+        sprites.add(greenBlock);
     }
 
     public enum GAME_STATE {

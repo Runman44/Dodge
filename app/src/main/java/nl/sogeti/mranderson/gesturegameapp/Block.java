@@ -45,7 +45,7 @@ public class Block {
     }
 
 
-    private void update() {
+    protected void update() {
         if (x > gameView.getWidth() - size - xSpeed || x + xSpeed < 0) {
             xSpeed = -xSpeed;
         }
@@ -72,5 +72,16 @@ public class Block {
             return true;
         }
         return false;
+    }
+
+    public void decreaseSpeed() {
+        Random rnd = new Random();
+        xSpeed = rnd.nextInt(25);
+        ySpeed = rnd.nextInt(25);
+    }
+
+    public void increaseSpeed() {
+        xSpeed = xSpeed - 5;
+        ySpeed = ySpeed - 5;
     }
 }
