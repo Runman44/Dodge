@@ -43,8 +43,10 @@ public class Timer {
     }
 
     private void checkTime() {
-        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 10 == 0)
+        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 10 == 0 && t != 0)
             mTimeCallback.onFiveSeconds();
+        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 30 == 0 && t != 0)
+            mTimeCallback.onMinute();
     }
 
     public void setTimeCallback(TimeCallBack cb) {

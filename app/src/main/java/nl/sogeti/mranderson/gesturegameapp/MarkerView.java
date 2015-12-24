@@ -15,22 +15,20 @@ public class MarkerView {
     private float y = 0;
     private boolean active = false;
     private boolean isDeath = false;
+    private boolean extraShield;
+    private Paint paint;
 
     public void onDraw(Canvas canvas) {
-        canvas.drawCircle(x, y, size, getPaint());
+        canvas.drawCircle(x, y, size, paint);
     }
 
-    private Paint getPaint() {
-        Paint paint = new Paint();
+
+    private void getPaint() {
+        paint = new Paint();
         paint.setAntiAlias(true);
-        if (active) {
-            paint.setColor(Color.BLACK);
-        } else {
-            paint.setColor(Color.GRAY);
-        }
+        paint.setColor(Color.GRAY);
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(10f);
-        return paint;
     }
 
     public MarkerView(GameView gameView) {
@@ -38,6 +36,7 @@ public class MarkerView {
         size = gameView.getHeight() / 30;
         x = gameView.getWidth() / 2;
         y = gameView.getHeight() / 2;
+        getPaint();
     }
 
     public float getX() {
@@ -71,6 +70,11 @@ public class MarkerView {
 
     public void setActive(boolean active) {
         this.active = active;
+        if (active) {
+            paint.setColor(Color.BLACK);
+        } else {
+            paint.setColor(Color.GRAY);
+        }
     }
 
     public boolean getIsDeath() {
@@ -83,5 +87,19 @@ public class MarkerView {
 
     public int getSize() {
         return size;
+    }
+
+    public void setExtraShield(boolean b) {
+        extraShield = b;
+        if(b){
+            paint.setStyle(Paint.Style.STROKE);
+            paint.setColor(Color.RED);
+        } else {
+            getPaint();
+        }
+    }
+
+    public boolean getExtraShield() {
+        return extraShield;
     }
 }

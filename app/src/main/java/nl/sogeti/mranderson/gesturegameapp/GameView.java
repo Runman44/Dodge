@@ -125,16 +125,30 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
                             for (Block sprite2 : sprites) {
                                 sprite2.decreaseSpeed();
                             }
+                        } else if (sprite instanceof BlueBlock) {
+                            i.remove();
+                            setBonusTouched();
+                            activeMarker.setExtraShield(true);
                         } else {
-                            activeMarker.setIsDeath(true);
-                            setGameOverState();
-                            break;
+                            if (!activeMarker.getExtraShield()) {
+                                activeMarker.setIsDeath(true);
+                                setGameOverState();
+                                break;
+                            } else {
+                                activeMarker.setActive(false);
+                                activeMarker.setExtraShield(false);
+                                mGameCallback.onSecondLife();
+                            }
                         }
                     }
                 }
 
             }
         }
+    }
+
+    void startSecondLife() {
+        activeMarker.setActive(true);
     }
 
     private void setBonusTouched() {
@@ -196,12 +210,16 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
             if (sprite instanceof GreenBlock) {
                 i.remove();
             }
+            if (sprite instanceof BlueBlock) {
+                i.remove();
+            }
         }
     }
 
     @Override
     public void onMinute() {
-
+        BlueBlock blueBlock = new BlueBlock(this);
+        sprites.add(blueBlock);
     }
 
     @Override

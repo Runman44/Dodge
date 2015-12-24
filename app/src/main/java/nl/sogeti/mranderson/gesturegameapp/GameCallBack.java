@@ -8,4 +8,6 @@ public interface GameCallBack {
     void onGameOver(long endTime, boolean isDeath);
 
     void onBonusTouched();
+
+    void onSecondLife();
 }

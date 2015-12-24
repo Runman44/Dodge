@@ -7,12 +7,11 @@ import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
 
@@ -153,6 +152,26 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
         playBonus();
     }
 
+    @Override
+    public void onSecondLife() {
+        //TODO play sound here
+        playSecondLife();
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    public void run() {
+                        gameView.startSecondLife();
+                    }
+                }, 1000);
+
+            }
+        });
+
+    }
+
+
     private void isAchievement(long endTime) {
         if (getApiClient().isConnected()) {
             if (endTime >= 20) {
@@ -191,6 +210,11 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
         backgroundMusic.setVolume(0.5f, 0.5f);
         backgroundMusic.setLooping(true);
         backgroundMusic.start();
+    }
+
+    private void playSecondLife() {
+        MediaPlayer secondMusic = MediaPlayer.create(this, R.raw.hit);
+        secondMusic.start();
     }
 
     private void playClick() {
