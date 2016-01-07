@@ -12,8 +12,12 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.games.Games;
 import com.google.example.games.basegameutils.BaseGameActivity;
+
+import at.markushi.ui.CircleButton;
 
 public class MainActivity extends BaseGameActivity implements GameCallBack {
 
@@ -24,6 +28,7 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     private TextView score;
     private TextView highScore;
     private MediaPlayer backgroundMusic;
+    private static boolean sound = true;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,10 +46,10 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
 //        AdRequest adRequest = new AdRequest.Builder()
 //                .addTestDevice(AdRequest.DEVICE_ID_EMULATOR)        // All emulators
 //                .build();
-////
-//        AdView mAdView = (AdView) findViewById(R.id.adView);
-////        AdRequest adRequest = new AdRequest.Builder().build();
-//        mAdView.loadAd(adRequest);
+//
+        AdView mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
 
 
@@ -85,6 +90,19 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
         }
     }
 
+    public void onSound(View v) {
+        playClick();
+        if (sound) {
+            ((CircleButton) v).setImageResource(R.drawable.ic_volume_off_white_36dp);
+            sound = false;
+            backgroundMusic.pause();
+        } else {
+            ((CircleButton) v).setImageResource(R.drawable.ic_volume_up_white_36dp);
+            sound = true;
+            backgroundMusic.start();
+        }
+
+    }
 
     public void onShare(View v) {
         playClick();
@@ -254,9 +272,24 @@ public class MainActivity extends BaseGameActivity implements GameCallBack {
     }
 
     @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("sound", sound);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        sound = savedInstanceState.getBoolean("sound");
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
-        backgroundMusic.start();
+        // TODO fix this - if sound is muted.
+        if (sound) {
+            backgroundMusic.start();
+        }
     }
 
     @Override
