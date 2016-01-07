@@ -24,7 +24,7 @@ public class Block {
         size = gameView.getHeight() / 20;
         Random rnd = new Random();
         x = rnd.nextInt(gameView.getWidth() - size);
-        y = rnd.nextInt(gameView.getHeight() - size);
+        y = rnd.nextInt((gameView.getHeight() / 4) - size);
         xSpeed = rnd.nextInt(25);
         ySpeed = rnd.nextInt(25);
         p = new Paint();
@@ -32,12 +32,6 @@ public class Block {
         p.setColor(Color.RED);
         p.setStyle(Paint.Style.FILL);
         p.setStrokeWidth(10f);
-    }
-
-    public void setSpeed(int speed) {
-        Random rnd = new Random();
-        xSpeed = rnd.nextInt(speed);
-        ySpeed = rnd.nextInt(speed);
     }
 
     public Paint getPaint() {
@@ -80,8 +74,4 @@ public class Block {
         ySpeed = rnd.nextInt(25);
     }
 
-    public void increaseSpeed() {
-        xSpeed = xSpeed - 5;
-        ySpeed = ySpeed - 5;
-    }
 }

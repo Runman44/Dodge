@@ -7,5 +7,7 @@ public interface TimeCallBack {
 
     void onMinute();
 
-    void onFiveSeconds();
+    void onThirtySeconds();
+
+    void onTenSeconds();
 }

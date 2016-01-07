@@ -89,10 +89,6 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
         sprites.add(new Block(this));
         sprites.add(new Block(this));
         sprites.add(new Block(this));
-        sprites.add(new Block(this));
-        sprites.add(new Block(this));
-        sprites.add(new Block(this));
-        sprites.add(new Block(this));
     }
 
     @Override
@@ -206,14 +202,11 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
         activeMarker.setIsDeath(false);
         Iterator<Block> i = sprites.iterator();
         while (i.hasNext()) {
-            Block sprite = i.next();
-            if (sprite instanceof GreenBlock) {
-                i.remove();
-            }
-            if (sprite instanceof BlueBlock) {
-                i.remove();
-            }
+            i.remove();
         }
+        sprites.add(new Block(this));
+        sprites.add(new Block(this));
+        sprites.add(new Block(this));
     }
 
     @Override
@@ -223,9 +216,15 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
     }
 
     @Override
-    public void onFiveSeconds() {
+    public void onThirtySeconds() {
         GreenBlock greenBlock = new GreenBlock(this);
         sprites.add(greenBlock);
+    }
+
+    @Override
+    public void onTenSeconds() {
+        if (sprites.size() < 9)
+            sprites.add(new Block(this));
     }
 
     public enum GAME_STATE {
