@@ -202,6 +202,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
         activeMarker.setIsDeath(false);
         Iterator<Block> i = sprites.iterator();
         while (i.hasNext()) {
+            Block sprite = i.next();
             i.remove();
         }
         sprites.add(new Block(this));
