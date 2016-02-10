@@ -45,9 +45,9 @@ public class Timer {
     private void checkTime() {
         if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 10 == 0 && t != 0)
             mTimeCallback.onTenSeconds();
-        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 28 == 0 && t != 0)
+        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 25 == 0 && t != 0)
             mTimeCallback.onThirtySeconds();
-        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 62 == 0 && t != 0)
+        if (t != getElapsedTimeSecs() && getElapsedTimeSecs() % 40 == 0 && t != 0)
             mTimeCallback.onMinute();
 
     }

@@ -96,9 +96,16 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
         if (canvas != null) {
 
             canvas.drawColor(Color.WHITE);
-            for (Block sprite : sprites) {
+            //TODO test FIX
+            Iterator<Block> j = sprites.iterator();
+            while (j.hasNext()) {
+                Block sprite = j.next(); // must be called before you can call i.remove()
                 sprite.onDraw(canvas);
             }
+//            for (Block sprite : sprites) {
+//                //TODO CRAASH HERE !
+//                sprite.onDraw(canvas);
+//            }
 
             if (STATE == GAME_STATE.PREPARE) {
                 activeMarker.onDraw(canvas);
@@ -224,7 +231,7 @@ public class GameView extends SurfaceView implements View.OnTouchListener, TimeC
 
     @Override
     public void onTenSeconds() {
-        if (sprites.size() < 9)
+        if (sprites.size() < 7)
             sprites.add(new Block(this));
     }
 
